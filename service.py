@@ -7,7 +7,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.wfile.write(b"This is webhook converter (aka \"hello-i-move-jsons\")\n")
         self.wfile.write(b"Converts boring default SCP:SL reports into beautiful ones and POSTs them to endpoint specified URL path\n\n")
-        self.wfile.write(b"Usage: \"http://<link to this server>[:port]/https://discord.com/api/webhooks/.../...\" in SCP:SL report webhook field\n\n")
+        self.wfile.write(b"Usage: \"http://<link to this server>[:port]/https://discord.com/api/webhooks/.../...\" in SCP:SL report webhook field\n")
+        self.wfile.write(b"Example: http://127.0.0.1:7110/https://discord.com/api/webhooks/xxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n")
         self.wfile.write(b"(only properly handles report events)")
 
     def do_POST(self):
@@ -34,7 +35,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 {
                     "title": f"New report on {offender_nick}",
                     "description": reason,
-                    "color": 16724736,
+                    "color": 0xff3300,
                     "fields": [
                         {
                             "name": "Info about reporter",
@@ -59,6 +60,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
         requests.post(webhook_url, json = new_data)
 
-server_address = ("0.0.0.0", 7110) # also it is a good idea to firewall this port or even replace 0.0.0.0 with 127.0.0.1
+server_address = ("0.0.0.0", 7110)
+
 httpd = http.server.HTTPServer(server_address, RequestHandler)
 httpd.serve_forever()
